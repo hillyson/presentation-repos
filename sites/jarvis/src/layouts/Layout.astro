@@ -1,0 +1,89 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Jarvis 是一个 AI 驱动的工程交付平台，将 Claude Code 能力深度集成到开发工作流，覆盖从需求输入到任务交付的完整生命周期。'
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>{title}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href={`${base}/styles/global.css`} />
+</head>
+
+<body>
+  <!-- Background Decorations -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+  <div class="bg-grid-overlay" aria-hidden="true"></div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <slot />
+  </div>
+
+  <!-- Scroll Animation -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    // Nav scroll effect
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      const handleScroll = () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+  </script>
+</body>
+</html>
+
+<style is:global>
+  /* Nav scroll state */
+  .nav.scrolled {
+    background: rgba(10, 10, 15, 0.95) !important;
+    border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+  }
+</style>

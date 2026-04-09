@@ -1,0 +1,12 @@
+{
+  "name": "presentation-repos",
+  "private": true,
+  "description": "Multi-site static presentation platform — each site is an independent Astro package",
+  "scripts": {
+    "dev:jarvis": "pnpm --filter jarvis-site dev",
+    "build": "pnpm --filter './sites/*' run build",
+    "build:jarvis": "pnpm --filter jarvis-site build",
+    "preview:jarvis": "pnpm --filter jarvis-site preview"
+  },
+  "packageManager": "pnpm@9.4.0"
+}
