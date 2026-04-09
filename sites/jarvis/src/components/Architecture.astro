@@ -1,0 +1,318 @@
+---
+const layers = [
+  {
+    id: 4,
+    name: '展示层',
+    color: 'cyan',
+    services: ['Web UI', 'Feishu Bot'],
+    description: '人机交互入口，提供审批流程、实时监控、DAG 可视化和 Feishu 消息通知。',
+    tech: ['Vue 3', 'Vite', 'SSE', 'Feishu Webhook'],
+  },
+  {
+    id: 3,
+    name: '业务协调层',
+    color: 'purple',
+    services: ['jarvis-core'],
+    description: '平台"大脑"。负责需求管理、任务调度、执行编排、状态监控，所有业务逻辑在此汇聚。',
+    tech: ['Go', 'MySQL', 'State Machine', 'DAG Scheduler'],
+    highlight: true,
+  },
+  {
+    id: 2,
+    name: '事件接入层',
+    color: 'blue',
+    services: ['gitlab-webhook', 'Feishu webhook', 'HTTP API', 'GitLab API'],
+    description: '将外部世界的事件翻译为平台内部事件，上报给业务协调层处理。',
+    tech: ['Webhook', 'Event Bridge', 'Go'],
+  },
+  {
+    id: 1,
+    name: 'AI 执行层',
+    color: 'indigo',
+    services: ['claude-executor'],
+    description: '管理 Claude Code 进程池、会话生命周期、执行队列和超时控制，不感知业务语义。',
+    tech: ['Claude Code', 'Process Pool', 'Go'],
+  },
+];
+---
+
+<section class="section" id="architecture" aria-labelledby="arch-title">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label" data-animate>系统架构</div>
+      <h2 class="section-title" id="arch-title" data-animate data-delay="1">四层架构设计</h2>
+      <p class="section-desc" data-animate data-delay="2">
+        严格的层级边界确保各层职责单一，层 2 不直连层 1，层 1 不感知业务语义。
+        关注点分离使每一层都可以独立演进和替换。
+      </p>
+    </div>
+
+    <div class="arch-container">
+      <!-- Arrow annotation -->
+      <div class="arch-annotation" aria-hidden="true">
+        <div class="annotation-line"></div>
+        <div class="annotation-text">数据流向</div>
+        <div class="annotation-arrow">↓</div>
+      </div>
+
+      <!-- Layers -->
+      <div class="arch-layers">
+        {layers.map((layer, i) => (
+          <div
+            class={`arch-layer layer-${layer.color} ${layer.highlight ? 'layer-highlight' : ''}`}
+            data-animate
+            data-delay={String(i + 1)}
+          >
+            <div class="layer-header">
+              <div class={`layer-num layer-num-${layer.color}`}>
+                Layer {layer.id}
+              </div>
+              <div class="layer-name">{layer.name}</div>
+              <div class="layer-services">
+                {layer.services.map(s => (
+                  <span class="layer-service-tag">{s}</span>
+                ))}
+              </div>
+            </div>
+
+            <p class="layer-desc">{layer.description}</p>
+
+            <div class="layer-tech">
+              {layer.tech.map(t => (
+                <code>{t}</code>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- jarvis-core internal detail -->
+    <div class="core-detail" data-animate>
+      <div class="core-detail-header">
+        <div class="section-label" style="margin-bottom: 0;">jarvis-core 内部模块</div>
+        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">Layer 3 业务协调层的核心组成</p>
+      </div>
+      <div class="core-modules">
+        {[
+          { name: 'api/', desc: 'HTTP 接入点', color: 'blue' },
+          { name: 'requirement/', desc: '需求引擎', color: 'purple' },
+          { name: 'task/', desc: '任务 & DAG 管理', color: 'purple' },
+          { name: 'scheduler/', desc: '事件驱动 + 轮询调度', color: 'indigo' },
+          { name: 'executor/', desc: '执行编排', color: 'indigo' },
+          { name: 'retry/', desc: '四级智能重试', color: 'amber' },
+          { name: 'observer/', desc: '状态事件系统', color: 'cyan' },
+          { name: 'notifier/', desc: '飞书 + SSE 双通道', color: 'cyan' },
+          { name: 'store/', desc: '持久化层 MySQL', color: 'green' },
+        ].map((m, i) => (
+          <div class={`core-module core-module-${m.color}`} data-animate data-delay={String(i % 4 + 1)}>
+            <code class="module-name">{m.name}</code>
+            <span class="module-desc">{m.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arch-container {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  @media (max-width: 640px) {
+    .arch-container { grid-template-columns: 1fr; }
+    .arch-annotation { display: none; }
+  }
+
+  /* Annotation */
+  .arch-annotation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--space-6);
+    gap: var(--space-2);
+  }
+
+  .annotation-line {
+    width: 1px;
+    flex: 1;
+    background: linear-gradient(to bottom, var(--primary), transparent);
+    min-height: 200px;
+  }
+
+  .annotation-text {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .annotation-arrow {
+    font-size: 1rem;
+    color: var(--primary);
+    margin-top: var(--space-2);
+    animation: bounce-down 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* Layers */
+  .arch-layers { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .arch-layer {
+    padding: var(--space-6) var(--space-6);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    cursor: default;
+  }
+
+  .arch-layer:hover {
+    background: var(--bg-card-hover);
+    transform: translateX(4px);
+  }
+
+  /* Color variants */
+  .layer-cyan { border-left: 3px solid var(--accent); }
+  .layer-purple { border-left: 3px solid var(--secondary); }
+  .layer-blue { border-left: 3px solid #3b82f6; }
+  .layer-indigo { border-left: 3px solid var(--primary); }
+
+  .layer-highlight {
+    background: rgba(139, 92, 246, 0.05);
+    border-color: rgba(139, 92, 246, 0.2);
+  }
+
+  .layer-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-3);
+  }
+
+  .layer-num {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .layer-num-cyan { background: rgba(34,211,238,0.1); color: var(--accent); border: 1px solid rgba(34,211,238,0.2); }
+  .layer-num-purple { background: rgba(139,92,246,0.1); color: var(--secondary); border: 1px solid rgba(139,92,246,0.2); }
+  .layer-num-blue { background: rgba(59,130,246,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+  .layer-num-indigo { background: rgba(99,102,241,0.1); color: var(--primary-light); border: 1px solid rgba(99,102,241,0.2); }
+
+  .layer-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .layer-services {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .layer-service-tag {
+    font-size: 0.8125rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid transparent;
+  }
+
+  .layer-cyan .layer-service-tag {
+    background: rgba(34,211,238,0.1);
+    color: var(--accent);
+    border-color: rgba(34,211,238,0.2);
+  }
+
+  .layer-purple .layer-service-tag {
+    background: rgba(139,92,246,0.1);
+    color: var(--secondary);
+    border-color: rgba(139,92,246,0.2);
+  }
+
+  .layer-blue .layer-service-tag {
+    background: rgba(59,130,246,0.1);
+    color: #60a5fa;
+    border-color: rgba(59,130,246,0.2);
+  }
+
+  .layer-indigo .layer-service-tag {
+    background: rgba(99,102,241,0.1);
+    color: var(--primary-light);
+    border-color: rgba(99,102,241,0.2);
+  }
+
+  .layer-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-3);
+  }
+
+  .layer-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Core detail */
+  .core-detail {
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .core-detail-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .core-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .core-module {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .core-module:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.04); }
+
+  .module-name { font-size: 0.8125rem; color: var(--primary-light); }
+  .module-desc { font-size: 0.75rem; color: var(--text-muted); }
+
+  .core-module-blue { border-left: 2px solid #3b82f6; }
+  .core-module-purple { border-left: 2px solid var(--secondary); }
+  .core-module-indigo { border-left: 2px solid var(--primary); }
+  .core-module-amber { border-left: 2px solid var(--accent-amber); }
+  .core-module-cyan { border-left: 2px solid var(--accent); }
+  .core-module-green { border-left: 2px solid var(--accent-green); }
+</style>

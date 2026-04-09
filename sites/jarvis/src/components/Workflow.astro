@@ -1,0 +1,263 @@
+---
+const steps = [
+  {
+    num: '01',
+    title: '输入需求',
+    desc: '支持纯文字描述、飞书文档链接或原型图。平台自动解析，按六维度提取：基本信息、背景、描述、业务规则、技术上下文、验收标准。',
+    color: 'blue',
+    icon: '📝',
+    note: '支持飞书 MCP 自动读取',
+  },
+  {
+    num: '02',
+    title: '六维澄清',
+    desc: '通过 Phase 0 澄清门，9 项达标清单确认需求完整性。未达标时循环澄清直到全部满足，防止模糊需求进入执行阶段。',
+    color: 'purple',
+    icon: '🎯',
+    note: '9 项强制检查清单',
+  },
+  {
+    num: '03',
+    title: 'DAG 分解',
+    desc: 'AI 将需求分解为有依赖关系的 WorkUnit，构建 DAG。无依赖的任务可并行执行，文件锁防止写冲突。',
+    color: 'indigo',
+    icon: '⬡',
+    note: '并行 + 文件级锁',
+  },
+  {
+    num: '04',
+    title: 'AI 执行 TDD',
+    desc: 'claude-executor 驱动 Claude Code 按 TDD 流程执行：Red（失败测试）→ Green（最小实现）→ Refactor。',
+    color: 'primary',
+    icon: '⚡',
+    note: '测试覆盖率 ≥ 80%',
+  },
+  {
+    num: '05',
+    title: '智能重试',
+    desc: '执行失败时触发四级重试：即时重试 → 附加上下文重试 → AI Reflection 自我分析 → 人工兜底。',
+    color: 'amber',
+    icon: '↻',
+    note: '最大化 AI 自主解决率',
+  },
+  {
+    num: '06',
+    title: '人工干预点',
+    desc: '三个场景触发局部暂停：需求确认、高风险操作（DDL/Push）审批、持续失败。批准后自动续行。',
+    color: 'amber',
+    icon: '👤',
+    note: '局部暂停，非全局停机',
+    isHuman: true,
+  },
+  {
+    num: '07',
+    title: '质量审查',
+    desc: '双 Reviewer Agent 并行审查：代码质量（规范、覆盖率、复杂度）+ 安全（secrets、注入、权限）。',
+    color: 'cyan',
+    icon: '🔍',
+    note: 'Critical 问题阻塞交付',
+  },
+  {
+    num: '08',
+    title: '交付',
+    desc: '推送 feature 分支，创建 MR，生成交付报告。包含 WorkUnit 完成情况、测试状态、上线 CheckList。',
+    color: 'green',
+    icon: '✓',
+    note: 'PR → Review → Merge',
+  },
+];
+---
+
+<section class="section" id="workflow" aria-labelledby="workflow-title">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label" data-animate>工作流程</div>
+      <h2 class="section-title" id="workflow-title" data-animate data-delay="1">从需求到交付的完整链路</h2>
+      <p class="section-desc" data-animate data-delay="2">
+        每个步骤都有明确的输入、输出和质量关卡，AI 自主处理绝大多数场景，人类在关键节点把控方向。
+      </p>
+    </div>
+
+    <div class="workflow-list">
+      {steps.map((step, i) => (
+        <div
+          class={`workflow-step ${step.isHuman ? 'workflow-step-human' : ''}`}
+          data-animate
+          data-delay={String((i % 3) + 1)}
+        >
+          <div class="step-left">
+            <div class={`step-num step-num-${step.color}`}>{step.num}</div>
+            {i < steps.length - 1 && (
+              <div class={`step-line step-line-${step.color}`} aria-hidden="true"></div>
+            )}
+          </div>
+
+          <div class={`step-body step-body-${step.color}`}>
+            <div class="step-header">
+              <h3 class="step-title">{step.title}</h3>
+              {step.isHuman && (
+                <span class="step-badge-human">人工节点</span>
+              )}
+            </div>
+            <p class="step-desc">{step.desc}</p>
+            <div class="step-note">
+              <span class="step-note-dot" aria-hidden="true"></span>
+              {step.note}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .workflow-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .workflow-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--space-6);
+    padding-bottom: var(--space-2);
+  }
+
+  .workflow-step-human .step-body {
+    background: rgba(251, 191, 36, 0.04);
+    border-color: rgba(251, 191, 36, 0.15);
+  }
+
+  /* Step Left */
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+    border: 1px solid;
+  }
+
+  .step-num-blue { background: rgba(59,130,246,0.1); color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+  .step-num-purple { background: rgba(139,92,246,0.1); color: var(--secondary); border-color: rgba(139,92,246,0.2); }
+  .step-num-indigo { background: rgba(99,102,241,0.1); color: var(--primary-light); border-color: rgba(99,102,241,0.2); }
+  .step-num-primary { background: rgba(99,102,241,0.15); color: var(--primary-light); border-color: rgba(99,102,241,0.3); }
+  .step-num-amber { background: rgba(251,191,36,0.1); color: var(--accent-amber); border-color: rgba(251,191,36,0.2); }
+  .step-num-cyan { background: rgba(34,211,238,0.1); color: var(--accent); border-color: rgba(34,211,238,0.2); }
+  .step-num-green { background: rgba(52,211,153,0.1); color: var(--accent-green); border-color: rgba(52,211,153,0.2); }
+
+  .step-line {
+    width: 1px;
+    flex: 1;
+    min-height: 24px;
+    margin: 4px 0;
+  }
+
+  .step-line-blue { background: linear-gradient(to bottom, rgba(59,130,246,0.3), transparent); }
+  .step-line-purple { background: linear-gradient(to bottom, rgba(139,92,246,0.3), transparent); }
+  .step-line-indigo { background: linear-gradient(to bottom, rgba(99,102,241,0.3), transparent); }
+  .step-line-primary { background: linear-gradient(to bottom, rgba(99,102,241,0.3), transparent); }
+  .step-line-amber { background: linear-gradient(to bottom, rgba(251,191,36,0.25), transparent); }
+  .step-line-cyan { background: linear-gradient(to bottom, rgba(34,211,238,0.3), transparent); }
+  .step-line-green { background: linear-gradient(to bottom, rgba(52,211,153,0.3), transparent); }
+
+  /* Step Body */
+  .step-body {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    border-radius: var(--radius-md);
+    padding: var(--space-6) var(--space-6);
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .step-body:hover { background: var(--bg-card-hover); }
+
+  .step-body-blue    { border-left-color: #3b82f6; }
+  .step-body-purple  { border-left-color: var(--secondary); }
+  .step-body-indigo  { border-left-color: var(--primary); }
+  .step-body-primary { border-left-color: var(--primary-light); }
+  .step-body-amber   { border-left-color: var(--accent-amber); }
+  .step-body-cyan    { border-left-color: var(--accent); }
+  .step-body-green   { border-left-color: var(--accent-green); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .step-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    margin: 0;
+  }
+
+  .step-badge-human {
+    font-size: 0.6875rem;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.25);
+    color: var(--accent-amber);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .step-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .step-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    font-size: 0.8125rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+  }
+
+  .step-note-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .step-body-blue    .step-note-dot { background: #3b82f6; }
+  .step-body-purple  .step-note-dot { background: var(--secondary); }
+  .step-body-indigo  .step-note-dot { background: var(--primary); }
+  .step-body-primary .step-note-dot { background: var(--primary-light); }
+  .step-body-amber   .step-note-dot { background: var(--accent-amber); }
+  .step-body-cyan    .step-note-dot { background: var(--accent); }
+  .step-body-green   .step-note-dot { background: var(--accent-green); }
+</style>

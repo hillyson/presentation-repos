@@ -1,0 +1,181 @@
+---
+const features = [
+  {
+    icon: '⬡',
+    title: 'DAG 任务编排',
+    color: 'blue',
+    desc: '将需求分解为可并行的任务有向无环图，支持依赖管理和局部失败隔离——一个任务失败不影响无依赖的其他任务继续执行。',
+    tags: ['并行执行', '依赖管理', '局部隔离'],
+  },
+  {
+    icon: '↻',
+    title: '四级智能重试',
+    color: 'purple',
+    desc: '从即时重试到 AI Reflection 自我分析，再到人工兜底，渐进式处理失败，最大化 AI 自主解决率。',
+    tags: ['L0 即时重试', 'L1 上下文重试', 'L2 AI Reflection', 'L3 人工介入'],
+  },
+  {
+    icon: '⚡',
+    title: '最小干预设计',
+    color: 'amber',
+    desc: '仅三个场景触发人工介入：需求确认、高风险操作审批、持续失败。干预是局部暂停，其他任务继续并行推进。',
+    tags: ['需求确认', '风险审批', '失败兜底'],
+  },
+  {
+    icon: '🔔',
+    title: '双通道通知',
+    color: 'cyan',
+    desc: 'Feishu 消息推送（适合 ≤30秒快速决策）+ Web UI（适合复杂修改和 DAG 可视化查看）。',
+    tags: ['Feishu Bot', 'Web SSE', 'DAG 可视化'],
+  },
+  {
+    icon: '⚙',
+    title: '状态机驱动',
+    color: 'indigo',
+    desc: '需求和任务都有完整的状态机定义，所有模块通过状态转换协作，状态是整个平台的单一真相来源。',
+    tags: ['需求状态机', '任务状态机', 'GitLab Labels'],
+  },
+  {
+    icon: '📡',
+    title: '事件驱动调度',
+    color: 'green',
+    desc: '主动事件触发（Webhook）为主，定时轮询（10-30s）为兜底，确保任务在任何情况下都不会卡死。',
+    tags: ['Webhook 事件', '轮询兜底', '工作区锁'],
+  },
+];
+---
+
+<section class="section section-alt" id="features" aria-labelledby="features-title">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label" data-animate>核心能力</div>
+      <h2 class="section-title" id="features-title" data-animate data-delay="1">专为 AI 工程设计</h2>
+      <p class="section-desc" data-animate data-delay="2">
+        每一个设计决策都服务于同一个目标：让 AI 在安全边界内自主完成尽可能多的工作。
+      </p>
+    </div>
+
+    <div class="features-grid">
+      {features.map((f, i) => (
+        <article class={`feature-card feature-card-${f.color} card`} data-animate data-delay={String((i % 3) + 1)}>
+          <div class={`feature-icon-wrap feature-icon-${f.color}`} aria-hidden="true">
+            <span class="feature-icon-symbol">{f.icon}</span>
+          </div>
+          <h3 class="feature-title">{f.title}</h3>
+          <p class="feature-desc">{f.desc}</p>
+          <div class="feature-tags">
+            {f.tags.map(tag => (
+              <span class="feature-tag">{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Icon */
+  .feature-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .feature-icon-blue { background: rgba(59,130,246,0.12); }
+  .feature-icon-purple { background: rgba(139,92,246,0.12); }
+  .feature-icon-amber { background: rgba(251,191,36,0.12); }
+  .feature-icon-cyan { background: rgba(34,211,238,0.12); }
+  .feature-icon-indigo { background: rgba(99,102,241,0.12); }
+  .feature-icon-green { background: rgba(52,211,153,0.12); }
+
+  .feature-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .feature-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .feature-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+  }
+
+  .feature-tag {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid transparent;
+  }
+
+  .feature-card-blue .feature-tag {
+    background: rgba(59,130,246,0.1);
+    color: #60a5fa;
+    border-color: rgba(59,130,246,0.2);
+  }
+
+  .feature-card-purple .feature-tag {
+    background: rgba(139,92,246,0.1);
+    color: var(--secondary);
+    border-color: rgba(139,92,246,0.2);
+  }
+
+  .feature-card-amber .feature-tag {
+    background: rgba(251,191,36,0.1);
+    color: var(--accent-amber);
+    border-color: rgba(251,191,36,0.2);
+  }
+
+  .feature-card-cyan .feature-tag {
+    background: rgba(34,211,238,0.1);
+    color: var(--accent);
+    border-color: rgba(34,211,238,0.2);
+  }
+
+  .feature-card-indigo .feature-tag {
+    background: rgba(99,102,241,0.1);
+    color: var(--primary-light);
+    border-color: rgba(99,102,241,0.2);
+  }
+
+  .feature-card-green .feature-tag {
+    background: rgba(52,211,153,0.1);
+    color: var(--accent-green);
+    border-color: rgba(52,211,153,0.2);
+  }
+
+  /* Card hover colors */
+  .feature-card-blue:hover { border-color: rgba(59,130,246,0.3) !important; }
+  .feature-card-purple:hover { border-color: rgba(139,92,246,0.3) !important; }
+  .feature-card-amber:hover { border-color: rgba(251,191,36,0.2) !important; }
+  .feature-card-cyan:hover { border-color: rgba(34,211,238,0.3) !important; }
+  .feature-card-indigo:hover { border-color: rgba(99,102,241,0.35) !important; }
+  .feature-card-green:hover { border-color: rgba(52,211,153,0.3) !important; }
+</style>

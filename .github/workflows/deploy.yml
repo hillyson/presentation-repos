@@ -1,0 +1,84 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build sites
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build jarvis site
+        run: pnpm --filter jarvis-site build
+
+      - name: Prepare final dist
+        run: |
+          mkdir -p final-dist/jarvis
+          # Copy jarvis site output
+          cp -r sites/jarvis/dist/. final-dist/jarvis/
+          # Add .nojekyll to allow _assets directory on GitHub Pages
+          touch final-dist/.nojekyll
+          # Root redirect to jarvis (first site)
+          cat > final-dist/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="zh">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=/presentation-repos/jarvis/">
+            <title>Presentation Repos</title>
+            <style>
+              body { font-family: system-ui, sans-serif; background: #0a0a0f; color: #94a3b8;
+                     display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+              a { color: #818cf8; }
+            </style>
+          </head>
+          <body>
+            <p>正在跳转到 <a href="/presentation-repos/jarvis/">Jarvis</a>…</p>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: final-dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

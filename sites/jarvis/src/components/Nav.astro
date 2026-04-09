@@ -1,0 +1,207 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const links = [
+  { href: '#overview', label: '概览' },
+  { href: '#architecture', label: '架构' },
+  { href: '#features', label: '核心能力' },
+  { href: '#workflow', label: '工作流程' },
+  { href: '#roadmap', label: '路线图' },
+];
+---
+
+<header class="nav" role="banner">
+  <div class="nav-inner container">
+    <a href={base} class="nav-logo" aria-label="Jarvis 主页">
+      <span class="logo-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2L18 7V13L10 18L2 13V7L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="10" cy="10" r="2.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="logo-text">JARVIS</span>
+    </a>
+
+    <nav class="nav-links" aria-label="页面导航">
+      {links.map(link => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
+    </nav>
+
+    <div class="nav-actions"></div>
+
+    <!-- Mobile menu toggle -->
+    <button class="nav-mobile-toggle" aria-label="切换菜单" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <div class="nav-mobile-menu" aria-hidden="true">
+    {links.map(link => (
+      <a href={link.href} class="nav-mobile-link">{link.label}</a>
+    ))}
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10, 10, 15, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    gap: var(--space-8);
+  }
+
+  /* Logo */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    display: flex;
+    align-items: center;
+    color: var(--primary-light);
+  }
+
+  .logo-text {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Links */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    transition: color 0.2s, background 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Actions */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .nav-cta {
+    font-size: 0.875rem;
+    padding: 0.4375rem 0.875rem;
+  }
+
+  /* Mobile toggle */
+  .nav-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: var(--space-2);
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .nav-mobile-toggle span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--text-secondary);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  /* Mobile menu */
+  .nav-mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: var(--space-4);
+    border-top: 1px solid var(--border);
+    background: var(--bg-900);
+  }
+
+  .nav-mobile-link {
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-mobile-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+
+    .nav-mobile-toggle {
+      display: flex;
+    }
+
+    .nav-mobile-menu.open {
+      display: flex;
+    }
+
+    .nav-actions { display: none; }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.nav-mobile-toggle');
+  const menu = document.querySelector('.nav-mobile-menu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    menu?.setAttribute('aria-hidden', String(!isOpen));
+  });
+
+  // Close on link click
+  document.querySelectorAll('.nav-mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      menu?.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>

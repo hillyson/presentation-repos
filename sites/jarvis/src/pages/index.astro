@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Overview from '../components/Overview.astro';
+import Architecture from '../components/Architecture.astro';
+import Features from '../components/Features.astro';
+import Workflow from '../components/Workflow.astro';
+import Roadmap from '../components/Roadmap.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Jarvis · AI 工程交付平台"
+  description="Jarvis 是一个 AI 驱动的工程交付平台，将 Claude Code 深度集成到开发工作流，覆盖从需求输入到任务交付的完整生命周期。AI 负责执行，人类专注于决策。"
+>
+  <Nav />
+  <main id="main-content">
+    <Hero />
+    <Overview />
+    <Architecture />
+    <Features />
+    <Workflow />
+    <Roadmap />
+  </main>
+  <Footer />
+</Layout>

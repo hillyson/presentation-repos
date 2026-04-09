@@ -1,0 +1,238 @@
+---
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+
+    <!-- Status badge -->
+    <div class="hero-badge" data-animate>
+      <span class="hero-badge-dot" aria-hidden="true"></span>
+      Phase 0 已完成 · 积极开发中
+    </div>
+
+    <!-- Heading -->
+    <h1 class="hero-title" id="hero-title" data-animate data-delay="1">
+      <span class="gradient-text">Jarvis</span>
+    </h1>
+
+    <p class="hero-subtitle" data-animate data-delay="2">
+      AI 驱动的工程交付平台
+    </p>
+
+    <p class="hero-desc" data-animate data-delay="3">
+      将 Claude Code 能力深度集成到开发工作流，<br class="hero-br" />
+      覆盖从需求输入到任务交付的完整生命周期。<br />
+      <strong>AI 负责执行，人类专注于决策。</strong>
+    </p>
+
+    <!-- CTA -->
+    <div class="hero-actions" data-animate data-delay="4">
+      <a href="#architecture" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/>
+        </svg>
+        了解架构设计
+      </a>
+      <a href="#workflow" class="btn btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+        工作流程
+      </a>
+    </div>
+
+    <!-- Metrics -->
+    <div class="hero-metrics" data-animate data-delay="5">
+      <div class="metric">
+        <span class="metric-value">4</span>
+        <span class="metric-label">架构层次</span>
+      </div>
+      <div class="metric-divider" aria-hidden="true"></div>
+      <div class="metric">
+        <span class="metric-value">4</span>
+        <span class="metric-label">级重试模型</span>
+      </div>
+      <div class="metric-divider" aria-hidden="true"></div>
+      <div class="metric">
+        <span class="metric-value">3</span>
+        <span class="metric-label">干预场景</span>
+      </div>
+      <div class="metric-divider" aria-hidden="true"></div>
+      <div class="metric">
+        <span class="metric-value">Go</span>
+        <span class="metric-label">核心语言</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll" aria-label="向下滚动" data-animate data-delay="5">
+    <div class="scroll-line" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 0 var(--space-16);
+    position: relative;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Badge */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.375rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: rgba(52, 211, 153, 0.08);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    color: var(--accent-green);
+    margin-bottom: var(--space-8);
+    letter-spacing: 0.01em;
+  }
+
+  .hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  /* Title */
+  .hero-title {
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: var(--space-6);
+  }
+
+  /* Subtitle */
+  .hero-subtitle {
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.01em;
+  }
+
+  /* Description */
+  .hero-desc {
+    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: var(--space-10);
+  }
+
+  .hero-desc strong {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .hero-br { display: none; }
+  @media (min-width: 640px) { .hero-br { display: inline; } }
+
+  /* Actions */
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-16);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Metrics */
+  .hero-metrics {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-4) var(--space-8);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .metric-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+  }
+
+  /* Scroll indicator */
+  .hero-scroll {
+    position: absolute;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--primary));
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-metrics { gap: var(--space-4); padding: var(--space-4); }
+    .metric-divider { display: none; }
+  }
+</style>
