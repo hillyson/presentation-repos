@@ -21,9 +21,9 @@ const layers = [
     id: 2,
     name: '事件接入层',
     color: 'blue',
-    services: ['gitlab-webhook', 'Feishu webhook', 'HTTP API', 'GitLab API'],
-    description: '将外部世界的事件翻译为平台内部事件，上报给业务协调层处理。',
-    tech: ['Webhook', 'Event Bridge', 'Go'],
+    services: ['gitlab-webhook', 'Feishu webhook', 'HTTP API', 'AI Code Review'],
+    description: '将外部世界的事件翻译为平台内部事件上报协调层；内嵌 AI Code Review — MR/Push 触发自动审查、智能 diff 过滤、Bot 评论管理。',
+    tech: ['Webhook', 'Event Bridge', 'LLM Review', 'Go'],
   },
   {
     id: 1,
@@ -34,6 +34,12 @@ const layers = [
     tech: ['Claude Code', 'Process Pool', 'Go'],
   },
 ];
+
+const infra = {
+  name: 'service-manager',
+  description: '基础设施 daemon（端口 9100）— 管理所有 Jarvis 服务的完整生命周期：启停 / 重启 / 编译重建、SSE 状态广播、实时日志流、按依赖顺序批量操作。不感知业务语义，只做进程管理。',
+  tech: ['REST API', 'SSE pub-sub', 'Process Adopt', 'Go'],
+};
 ---
 
 <section class="section" id="architecture" aria-labelledby="arch-title">
@@ -87,6 +93,20 @@ const layers = [
       </div>
     </div>
 
+    <!-- Infrastructure layer: service-manager -->
+    <div class="infra-card" data-animate>
+      <div class="infra-header">
+        <div class="infra-badge">基础设施层</div>
+        <div class="infra-name">{infra.name}</div>
+      </div>
+      <p class="infra-desc">{infra.description}</p>
+      <div class="layer-tech">
+        {infra.tech.map(t => (
+          <code>{t}</code>
+        ))}
+      </div>
+    </div>
+
     <!-- jarvis-core internal detail -->
     <div class="core-detail" data-animate>
       <div class="core-detail-header">
@@ -95,13 +115,14 @@ const layers = [
       </div>
       <div class="core-modules">
         {[
-          { name: 'api/', desc: 'HTTP 接入点', color: 'blue' },
-          { name: 'requirement/', desc: '需求引擎', color: 'purple' },
+          { name: 'api/', desc: 'HTTP 接入点 + DAG 查询', color: 'blue' },
+          { name: 'decomposer/', desc: 'AI 需求拆解 + Schema 校验', color: 'purple' },
+          { name: 'requirement/', desc: '需求引擎 + 确认门控', color: 'purple' },
           { name: 'task/', desc: '任务 & DAG 管理', color: 'purple' },
           { name: 'scheduler/', desc: '事件驱动 + 轮询调度', color: 'indigo' },
-          { name: 'executor/', desc: '执行编排', color: 'indigo' },
+          { name: 'executor/', desc: '执行编排 + 风险检测', color: 'indigo' },
           { name: 'retry/', desc: '四级智能重试', color: 'amber' },
-          { name: 'observer/', desc: '状态事件系统', color: 'cyan' },
+          { name: 'observer/', desc: 'StateEvent 总线 + 监控', color: 'cyan' },
           { name: 'notifier/', desc: '飞书 + SSE 双通道', color: 'cyan' },
           { name: 'store/', desc: '持久化层 MySQL', color: 'green' },
         ].map((m, i) => (
@@ -272,6 +293,51 @@ const layers = [
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  /* Infrastructure card (service-manager) */
+  .infra-card {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--border-hover);
+    background: rgba(255, 255, 255, 0.015);
+    border-left: 3px solid var(--accent-green);
+  }
+
+  .infra-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .infra-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(52, 211, 153, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    flex-shrink: 0;
+  }
+
+  .infra-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  .infra-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-3);
   }
 
   /* Core detail */

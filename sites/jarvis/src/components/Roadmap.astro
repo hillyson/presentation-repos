@@ -5,72 +5,94 @@ const phases = [
     title: 'gitlab-webhook + claude-executor',
     status: 'done',
     items: [
-      'GitLab Webhook 事件接入',
-      'Claude Code 进程池管理',
-      '基础会话和队列控制',
-      '超时与重启机制',
+      'GitLab Webhook 事件接入 + 规则引擎',
+      'Claude Code 进程池 + 会话复用',
+      '任务队列与超时控制',
+      'HTTP 通信骨架',
+    ],
+  },
+  {
+    id: 'Phase 0.5',
+    title: 'AI Code Review',
+    status: 'done',
+    items: [
+      'MR/Push 事件驱动自动审查',
+      '智能 diff 过滤（跳过生成文件/依赖锁）',
+      '项目白名单正则匹配',
+      'Bot 评论隐藏标签 + 自动清理',
     ],
   },
   {
     id: 'Phase 1',
     title: 'jarvis-core 核心骨架',
-    status: 'wip',
+    status: 'done',
     items: [
-      '需求管理引擎（六维澄清 + 状态机）',
-      '任务 DAG 构建与调度',
-      '事件驱动 Scheduler',
-      '状态观察者系统（observer）',
+      '需求管理 + 状态机流转',
+      'task_index / task_dag_edges 持久化',
+      '事件驱动 + 轮询 Scheduler',
+      'observer StateEvent 总线',
+    ],
+  },
+  {
+    id: 'Phase 1.5',
+    title: 'AI 需求拆解 + DAG 确认门',
+    status: 'done',
+    items: [
+      'decomposer：prompt 构建 + LLM 调用',
+      'Schema 校验 + DAG 无环检测',
+      'pending_confirm 确认 / 拒绝门控',
+      'Web UI → core 完整拆解链路',
     ],
   },
   {
     id: 'Phase 2',
-    title: 'Web UI 全功能',
-    status: 'planning',
+    title: '执行闭环（迭代 3）',
+    status: 'done',
     items: [
-      'DAG 可视化交互',
-      '审批流页面',
-      '实时执行监控（SSE）',
-      '任务详情与执行历史',
+      'executor 结果回调 jarvis-core',
+      'gitlab-webhook 事件路由到 core',
+      'GitLab Child Task 集成',
+      '调度 → 执行 → 回调完整链路',
     ],
   },
   {
     id: 'Phase 3',
-    title: '智能重试 + 通知 + 审批',
-    status: 'todo',
+    title: '智能重试 + 高风险审批（迭代 4）',
+    status: 'done',
     items: [
-      'Retry 四级模型实现',
-      'AI Reflection 自我分析',
-      'Feishu Bot 消息推送',
-      '高风险操作审批流',
+      'L0~L3 四级重试状态机',
+      'L1 上下文重试 prompt 构建',
+      'L2 Reflection 回写 prompt / DAG',
+      'execution intent 二段式 + 审批门控',
     ],
   },
   {
     id: 'Phase 4',
-    title: '数据统计与分析',
-    status: 'todo',
+    title: 'GitLab 双向同步 + 可观测性',
+    status: 'wip',
     items: [
-      '交付周期分析',
-      'AI 执行成功率',
-      '重试率与干预频率',
-      '工程效能仪表板',
+      'Issue 标签全状态同步（迭代 5 · 已完成）',
+      'StateEvent Bus + SSE 推送（已完成）',
+      '飞书推送通知（进行中）',
+      'Prometheus 指标 + 结构化日志',
     ],
   },
   {
     id: 'Phase 5',
-    title: '水平扩展',
-    status: 'todo',
+    title: '前端真实数据对接 + 水平扩展',
+    status: 'planning',
     items: [
-      '多执行器架构',
-      '任务队列分布式化',
-      '高可用部署',
-      '性能优化',
+      'DAG 可视化 + 作业监控',
+      'Workplace 管理 + 统计报表',
+      '多 executor 水平扩展',
+      '按规模评估消息队列解耦',
     ],
   },
 ];
 
 const statusMap = {
   done: { label: '已完成', class: 'badge-green' },
-  wip: { label: '开发中', class: 'badge-blue' },
+  wip: { label: '进行中', class: 'badge-blue' },
   planning: { label: '规划中', class: 'badge-amber' },
   todo: { label: '待开始', class: 'badge-muted' },
 };
@@ -82,7 +104,7 @@ const statusMap = {
       <div class="section-label" data-animate>开发路线图</div>
       <h2 class="section-title" id="roadmap-title" data-animate data-delay="1">从雏形到成熟平台</h2>
       <p class="section-desc" data-animate data-delay="2">
-        六个阶段逐步构建完整的 AI 工程交付能力，每个阶段都有独立的交付价值。
+        多阶段渐进构建完整的 AI 工程交付能力，每个阶段都有独立的交付价值。Phase 0 ~ Phase 3 已完成，当前推进 Phase 4。
       </p>
     </div>
 
@@ -119,10 +141,10 @@ const statusMap = {
     <div class="roadmap-progress" data-animate>
       <div class="progress-header">
         <span class="progress-label">总体进度</span>
-        <span class="progress-fraction">1 / 6 已完成</span>
+        <span class="progress-fraction">6 / 8 已完成 · 1 进行中</span>
       </div>
-      <div class="progress-bar" role="progressbar" aria-valuenow={17} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 17%">
-        <div class="progress-fill" style="width: 17%"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow={78} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 78%">
+        <div class="progress-fill" style="width: 78%"></div>
       </div>
     </div>
   </div>
