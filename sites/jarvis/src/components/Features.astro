@@ -1,6 +1,13 @@
 ---
 const features = [
   {
+    icon: '🧩',
+    title: 'AI 角色分离（4 职能解耦）',
+    color: 'indigo',
+    desc: 'Planner 拆解需求、Developer 实现代码、Reviewer 审 MR、Verifier 独立验收。四类角色在进程、workspace、模型、会话上完全隔离，打破"自己写自己验"的盲区。',
+    tags: ['Planner-AI', 'Developer-AI', 'Reviewer-AI', 'Verifier-AI'],
+  },
+  {
     icon: '⬡',
     title: 'AI 需求拆解 + DAG 编排',
     color: 'blue',
@@ -11,36 +18,50 @@ const features = [
     icon: '↻',
     title: '四级智能重试',
     color: 'purple',
-    desc: '从即时重试到 AI Reflection 自我分析，再到人工兜底，渐进式处理失败。Reflection 可产出新 prompt 或子任务拆解，运行时动态重构 DAG。',
+    desc: '从即时重试到 AI Reflection 自我分析，再到人工兜底。Reflection 可产出新 prompt 或子任务拆解，运行时动态重构 DAG。',
     tags: ['L0 瞬时', 'L1 上下文', 'L2 Reflection', 'L3 人工介入'],
   },
   {
-    icon: '⚡',
-    title: '最小干预设计',
-    color: 'amber',
-    desc: '仅三个场景触发人工介入：需求确认、高风险操作审批、持续失败。干预是局部暂停，不阻塞 DAG 中其他并行分支继续执行。',
-    tags: ['需求确认', '风险审批', '失败兜底'],
+    icon: '✅',
+    title: '独立验收阶段（L5 质量门）',
+    color: 'green',
+    desc: 'Verifier-AI 对主干代码逐条验证 accept_criteria，输出 pass / fail / uncertain 三类结构化结果；uncertain 自动转人工，避免 AI 自证循环。',
+    tags: ['独立 Executor', '跨模型交叉验证', 'uncertain 转人工', '验收中心'],
   },
   {
     icon: '🔍',
     title: 'AI Code Review',
     color: 'cyan',
-    desc: 'MR/Push 事件驱动自动审查，基于路径/扩展名的智能 diff 过滤跳过生成文件和依赖锁，Bot 评论隐藏标签确保每个 MR 只保留最新审查意见。',
+    desc: 'MR/Push 事件驱动自动审查，智能 diff 过滤跳过生成文件和依赖锁，Bot 评论隐藏标签确保每个 MR 只保留最新审查意见。',
     tags: ['MR 自动审查', 'Diff 过滤', '项目白名单', 'Bot 评论管理'],
+  },
+  {
+    icon: '⚖',
+    title: '缺陷裁决（severity × cost × scope）',
+    color: 'amber',
+    desc: '验收失败时，每个 defect 按三维度打分裁决：必修则自动回流开发、可接受则记入 known_issues、不可达则终止。修复循环封顶 2 次防死锁。',
+    tags: ['severity', 'cost', 'scope', '循环封顶'],
   },
   {
     icon: '⚙',
     title: 'GitLab 为状态权威',
     color: 'indigo',
-    desc: 'jarvis:* 前缀标签映射任务状态，webhook 双向同步；/jarvis approve 评论命令、标签变更、Issue 关闭均驱动内部状态流转，工程师无需切换系统。',
+    desc: 'jarvis:* 前缀标签映射任务状态，webhook 双向同步；/jarvis approve 评论命令、标签变更、Issue 关闭均驱动内部状态流转。',
     tags: ['jarvis: 标签体系', '/jarvis 斜杠命令', 'Issue/MR 双向绑定'],
   },
   {
     icon: '📡',
     title: '事件驱动调度 + Workspace Lock',
     color: 'green',
-    desc: '事件触发为主、10~30s 轮询兜底，确保任务不卡死。同一 repo 的任务通过 Workspace Lock 串行，避免并发写冲突；跨 repo 任务自由并行。',
+    desc: '事件触发为主、10~30s 轮询兜底，确保任务不卡死。同一 repo 的任务通过 Workspace Lock 串行，避免并发写冲突；跨 repo 自由并行。',
     tags: ['事件驱动', '轮询兜底', 'Workspace Lock'],
+  },
+  {
+    icon: '⚡',
+    title: '最小干预设计',
+    color: 'purple',
+    desc: '四类场景触发人工介入：需求确认、高风险操作、持续失败、验收 uncertain。干预是局部暂停，不阻塞 DAG 中其他并行分支。',
+    tags: ['需求确认', '风险审批', '失败兜底', '验收仲裁'],
   },
 ];
 ---

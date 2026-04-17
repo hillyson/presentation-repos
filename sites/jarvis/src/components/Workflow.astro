@@ -59,7 +59,7 @@ const steps = [
   },
   {
     num: '08',
-    title: 'AI Code Review',
+    title: 'AI Code Review（Reviewer-AI）',
     desc: 'MR 创建/更新或分支 push 触发 gitlab-webhook 异步审查：智能 diff 过滤跳过生成文件 + 项目白名单 + Bot 评论隐藏标签，每个 MR 只保留最新一条审查意见。',
     color: 'cyan',
     icon: '🔍',
@@ -67,11 +67,27 @@ const steps = [
   },
   {
     num: '09',
-    title: 'GitLab 双向同步 → 交付',
-    desc: 'task_index 与 GitLab jarvis:* 标签双向同步，MR merged 后释放 Workspace Lock 解锁下游；Milestone 进度 100% 触发飞书验收通知 + 交付报告。',
+    title: '独立验收阶段（Verifier-AI · L5）',
+    desc: '所有开发 Task mr_merged 后触发 acceptance_run：独立 Verifier Executor 规划验收 → 逐条 accept_criterion 执行收集证据 → 输出 pass / fail / uncertain。可使用不同模型做跨模型交叉验证。',
+    color: 'amber',
+    icon: '✅',
+    note: '独立 Executor · pass / fail / uncertain',
+  },
+  {
+    num: '10',
+    title: '缺陷裁决与修复回流',
+    desc: '验收失败时按 severity × cost × scope 三维度矩阵裁决：必修 → 自动生成 fix 任务回流开发；可接受 → 记入 known_issues 放行；不可达 → 需求终止。修复循环封顶 2 次防死锁。',
+    color: 'amber',
+    icon: '⚖',
+    note: '必修 / 接受 / 终止 · 循环封顶',
+  },
+  {
+    num: '11',
+    title: '交付（delivered）',
+    desc: 'Verifier 全条 pass 或"带已知问题放行"后需求进入 delivered；task_index 与 GitLab jarvis:* 标签双向同步，MR merged 释放 Workspace Lock，飞书推送验收报告。',
     color: 'green',
     icon: '✓',
-    note: 'Issue 标签 + MR 状态权威',
+    note: 'delivered · GitLab 状态权威',
   },
 ];
 ---

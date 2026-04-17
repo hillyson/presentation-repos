@@ -27,11 +27,11 @@ const layers = [
   },
   {
     id: 1,
-    name: 'AI 执行层',
+    name: 'AI 执行层（多角色隔离）',
     color: 'indigo',
-    services: ['claude-executor'],
-    description: '管理 Claude Code 进程池、会话生命周期、执行队列和超时控制，不感知业务语义。',
-    tech: ['Claude Code', 'Process Pool', 'Go'],
+    services: ['Developer Executor', 'Reviewer Executor', 'Verifier Executor'],
+    description: 'claude-executor 按角色分实例部署：Developer 写代码 / Reviewer 审 MR / Verifier 独立验收，进程、workspace、模型、配置完全隔离，打破"自己写自己验"的盲区。',
+    tech: ['Claude Code', 'Process Pool', 'Role-based Isolation', 'Go'],
   },
 ];
 
@@ -49,7 +49,7 @@ const infra = {
       <h2 class="section-title" id="arch-title" data-animate data-delay="1">四层架构设计</h2>
       <p class="section-desc" data-animate data-delay="2">
         严格的层级边界确保各层职责单一，层 2 不直连层 1，层 1 不感知业务语义。
-        关注点分离使每一层都可以独立演进和替换。
+        Layer 1 按 AI 角色分实例部署，Developer / Reviewer / Verifier 进程、workspace、模型完全隔离。
       </p>
     </div>
 
@@ -122,6 +122,7 @@ const infra = {
           { name: 'scheduler/', desc: '事件驱动 + 轮询调度', color: 'indigo' },
           { name: 'executor/', desc: '执行编排 + 风险检测', color: 'indigo' },
           { name: 'retry/', desc: '四级智能重试', color: 'amber' },
+          { name: 'acceptance/', desc: 'L5 独立验收 + 缺陷裁决', color: 'amber' },
           { name: 'observer/', desc: 'StateEvent 总线 + 监控', color: 'cyan' },
           { name: 'notifier/', desc: '飞书 + SSE 双通道', color: 'cyan' },
           { name: 'store/', desc: '持久化层 MySQL', color: 'green' },

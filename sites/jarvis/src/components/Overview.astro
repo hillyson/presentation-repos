@@ -15,8 +15,7 @@
           传统开发流程中，工程师花费大量时间在机械重复的工作上。<strong>Jarvis</strong> 重新定义了人机协作的边界。
         </p>
         <p class="overview-body" data-animate data-delay="3">
-          AI 负责拆解任务、编写代码、运行测试、处理失败——人类只在三个关键节点介入：
-          需求确认、高风险操作审批、持续失败处理。
+          AI 按职责分离为 Planner / Developer / Reviewer / Verifier 四类角色，开发与验收职责完全解耦——避免"自己写自己验"的盲区。人类只在三个关键节点介入：需求确认、高风险操作审批、持续失败与验收仲裁。
         </p>
         <p class="overview-body" data-animate data-delay="3">
           干预是局部暂停，不是全局停机。其他任务继续并行推进。
@@ -28,14 +27,14 @@
             <div class="role-icon" aria-hidden="true">👤</div>
             <div>
               <div class="role-title">人类角色</div>
-              <div class="role-desc">决策者 · 需求输入者 · 关键节点审批者 · 最终验收者</div>
+              <div class="role-desc">决策者 · 需求输入者 · 关键节点审批者 · 最终验收仲裁者</div>
             </div>
           </div>
           <div class="role-card role-ai">
             <div class="role-icon" aria-hidden="true">⚡</div>
             <div>
-              <div class="role-title">AI 角色</div>
-              <div class="role-desc">任务分解者 · 开发执行者 · 代码审查者 · 失败反思者</div>
+              <div class="role-title">AI 四角色</div>
+              <div class="role-desc">Planner（拆解） · Developer（实现） · Reviewer（审查） · Verifier（独立验收）</div>
             </div>
           </div>
         </div>
@@ -96,8 +95,8 @@
               </svg>
             </div>
             <div class="pipeline-content">
-              <div class="pipeline-label">交付</div>
-              <div class="pipeline-desc">代码审查 · Push · MR 创建</div>
+              <div class="pipeline-label">独立验收 → 交付</div>
+              <div class="pipeline-desc">Verifier-AI 对照验收标准 · L5 质量门</div>
             </div>
           </div>
         </div>

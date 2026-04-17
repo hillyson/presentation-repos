@@ -1,7 +1,9 @@
 ---
 const phases = [
+  // ─────────── M1 · 初版闭环（已完成） ───────────
   {
     id: 'Phase 0',
+    milestone: 'M1',
     title: 'gitlab-webhook + claude-executor',
     status: 'done',
     items: [
@@ -13,6 +15,7 @@ const phases = [
   },
   {
     id: 'Phase 0.5',
+    milestone: 'M1',
     title: 'AI Code Review',
     status: 'done',
     items: [
@@ -24,7 +27,8 @@ const phases = [
   },
   {
     id: 'Phase 1',
-    title: 'jarvis-core 核心骨架',
+    milestone: 'M1',
+    title: 'jarvis-core 核心骨架（迭代 0+1）',
     status: 'done',
     items: [
       '需求管理 + 状态机流转',
@@ -35,7 +39,8 @@ const phases = [
   },
   {
     id: 'Phase 1.5',
-    title: 'AI 需求拆解 + DAG 确认门',
+    milestone: 'M1',
+    title: 'AI 需求拆解 + DAG 确认门（迭代 2）',
     status: 'done',
     items: [
       'decomposer：prompt 构建 + LLM 调用',
@@ -46,6 +51,7 @@ const phases = [
   },
   {
     id: 'Phase 2',
+    milestone: 'M1',
     title: '执行闭环（迭代 3）',
     status: 'done',
     items: [
@@ -57,6 +63,7 @@ const phases = [
   },
   {
     id: 'Phase 3',
+    milestone: 'M1',
     title: '智能重试 + 高风险审批（迭代 4）',
     status: 'done',
     items: [
@@ -68,24 +75,75 @@ const phases = [
   },
   {
     id: 'Phase 4',
-    title: 'GitLab 双向同步 + 可观测性',
-    status: 'wip',
+    milestone: 'M1',
+    title: 'GitLab 双向同步（迭代 5）',
+    status: 'done',
     items: [
-      'Issue 标签全状态同步（迭代 5 · 已完成）',
-      'StateEvent Bus + SSE 推送（已完成）',
-      '飞书推送通知（进行中）',
-      'Prometheus 指标 + 结构化日志',
+      'Issue 标签全状态同步',
+      'GitLab API 扩展（Update/Close/SetLabel）',
+      'webhook 事件驱动反向同步',
+      'StateEvent Bus + SSE 推送',
     ],
   },
   {
     id: 'Phase 5',
-    title: '前端真实数据对接 + 水平扩展',
-    status: 'planning',
+    milestone: 'M1',
+    title: '前端真实数据 + 作业监控（迭代 7）',
+    status: 'done',
     items: [
       'DAG 可视化 + 作业监控',
-      'Workplace 管理 + 统计报表',
-      '多 executor 水平扩展',
-      '按规模评估消息队列解耦',
+      'Workplace 管理（性能 8.2s→0.5s）',
+      '统计报表（KPI + 双维度分析）',
+      '一键启动脚本',
+    ],
+  },
+  // ─────────── M2 · 生产级自动化（规划中） ───────────
+  {
+    id: 'Phase 6',
+    milestone: 'M2',
+    title: '多 Workplace 真实调度（迭代 8）',
+    status: 'planning',
+    items: [
+      'Executor 路由：按 WorkplaceID 动态选 URL',
+      'Workplace 分配策略 + repo 亲和性',
+      '多 Executor 健康检查 + 熔断降级',
+      'Session resume 真实性验证',
+    ],
+  },
+  {
+    id: 'Phase 7',
+    milestone: 'M2',
+    title: '研发过程质量门 L1-L4（迭代 9）',
+    status: 'planning',
+    items: [
+      'L1 项目级 verify（软门 → 硬门）',
+      'L2 Executor 自检 + 证据包 + 反幻觉',
+      'L3 AI Code Review verdict 门控',
+      'L4 CI Pipeline 绿门 + 质量指标',
+    ],
+  },
+  {
+    id: 'Phase 8',
+    milestone: 'M2',
+    title: '独立验收 L5 · Verifier-AI（迭代 10）',
+    status: 'planning',
+    items: [
+      '独立 Verifier Executor（可跨模型）',
+      '验收计划 + 逐条 criterion 执行',
+      'uncertain 转人工 + 缺陷裁决矩阵',
+      'WebUI 验收中心 + 一次通过率统计',
+    ],
+  },
+  {
+    id: 'Phase 9+',
+    milestone: 'M2',
+    title: '闭环补齐（迭代 11-15）',
+    status: 'planning',
+    items: [
+      '审批 & 反思 e2e（迭代 11）',
+      'WebUI 实时化（迭代 12）',
+      'GitLab 一体化 + 可观测性（迭代 13-14）',
+      '多环境 / 配置热更新（迭代 15）',
     ],
   },
 ];
@@ -96,6 +154,11 @@ const statusMap = {
   planning: { label: '规划中', class: 'badge-amber' },
   todo: { label: '待开始', class: 'badge-muted' },
 };
+
+const milestoneMap = {
+  M1: { label: 'M1 · 初版闭环', color: 'green' },
+  M2: { label: 'M2 · 生产级自动化', color: 'amber' },
+};
 ---
 
 <section class="section section-alt" id="roadmap" aria-labelledby="roadmap-title">
@@ -104,12 +167,20 @@ const statusMap = {
       <div class="section-label" data-animate>开发路线图</div>
       <h2 class="section-title" id="roadmap-title" data-animate data-delay="1">从雏形到成熟平台</h2>
       <p class="section-desc" data-animate data-delay="2">
-        多阶段渐进构建完整的 AI 工程交付能力，每个阶段都有独立的交付价值。Phase 0 ~ Phase 3 已完成，当前推进 Phase 4。
+        按两个里程碑推进：<strong>M1 初版闭环</strong>完成端到端打通；<strong>M2 生产级自动化</strong>引入多 Workplace、研发过程质量门 L1-L4、独立验收 L5，实现"能自动完成高质量任务"。
       </p>
     </div>
 
+    <!-- M1 Milestone -->
+    <div class="milestone-section" data-animate>
+      <div class="milestone-header milestone-header-green">
+        <span class="milestone-label">M1 · 初版闭环</span>
+        <span class="milestone-status">8 / 8 已完成</span>
+      </div>
+    </div>
+
     <div class="roadmap-grid">
-      {phases.map((phase, i) => {
+      {phases.filter(p => p.milestone === 'M1').map((phase, i) => {
         const status = statusMap[phase.status];
         return (
           <article
@@ -137,14 +208,49 @@ const statusMap = {
       })}
     </div>
 
+    <!-- M2 Milestone -->
+    <div class="milestone-section" data-animate>
+      <div class="milestone-header milestone-header-amber">
+        <span class="milestone-label">M2 · 生产级自动化</span>
+        <span class="milestone-status">规划中 · 迭代 8 ~ 15</span>
+      </div>
+    </div>
+
+    <div class="roadmap-grid">
+      {phases.filter(p => p.milestone === 'M2').map((phase, i) => {
+        const status = statusMap[phase.status];
+        return (
+          <article
+            class="roadmap-card card"
+            data-animate
+            data-delay={String((i % 3) + 1)}
+          >
+            <div class="roadmap-header">
+              <div class="roadmap-phase-id">{phase.id}</div>
+              <span class={`badge ${status.class}`}>{status.label}</span>
+            </div>
+            <h3 class="roadmap-title">{phase.title}</h3>
+            <ul class="roadmap-items">
+              {phase.items.map(item => (
+                <li class="roadmap-item">
+                  <span class="item-check" aria-hidden="true">○</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </article>
+        );
+      })}
+    </div>
+
     <!-- Progress bar -->
     <div class="roadmap-progress" data-animate>
       <div class="progress-header">
         <span class="progress-label">总体进度</span>
-        <span class="progress-fraction">6 / 8 已完成 · 1 进行中</span>
+        <span class="progress-fraction">M1 · 8/8 已完成 · M2 规划中</span>
       </div>
-      <div class="progress-bar" role="progressbar" aria-valuenow={78} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 78%">
-        <div class="progress-fill" style="width: 78%"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow={67} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 67%">
+        <div class="progress-fill" style="width: 67%"></div>
       </div>
     </div>
   </div>
@@ -155,7 +261,51 @@ const statusMap = {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--space-4);
-    margin-bottom: var(--space-12);
+    margin-bottom: var(--space-8);
+  }
+
+  /* Milestone section header */
+  .milestone-section {
+    margin-bottom: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .milestone-section:first-of-type {
+    margin-top: 0;
+  }
+
+  .milestone-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    gap: var(--space-3);
+  }
+
+  .milestone-header-green {
+    border-left-color: var(--accent-green);
+    background: rgba(52, 211, 153, 0.04);
+  }
+
+  .milestone-header-amber {
+    border-left-color: var(--accent-amber);
+    background: rgba(251, 191, 36, 0.04);
+  }
+
+  .milestone-label {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+
+  .milestone-status {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
   }
 
   .roadmap-card {
