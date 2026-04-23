@@ -27,11 +27,11 @@ const layers = [
   },
   {
     id: 1,
-    name: 'AI 执行层（多角色隔离）',
+    name: 'AI 执行层（多角色隔离 + 作业可观测）',
     color: 'indigo',
-    services: ['Developer Executor', 'Reviewer Executor', 'Verifier Executor'],
-    description: 'claude-executor 按角色分实例部署：Developer 写代码 / Reviewer 审 MR / Verifier 独立验收，进程、workspace、模型、配置完全隔离，打破"自己写自己验"的盲区。',
-    tech: ['Claude Code', 'Process Pool', 'Role-based Isolation', 'Go'],
+    services: ['Developer Executor', 'Reviewer Executor', 'Verifier Executor', 'streamjson', 'aijobsink'],
+    description: 'claude-executor 按角色分实例部署：Developer 写代码 / Reviewer 审 MR / Verifier 独立验收。streamjson 解析 Claude CLI 原始事件为 domain event，aijobsink 回传 jarvis-core — 每次 claude 进程调用都可实时观测，两步法终止（SIGTERM → 5s → SIGKILL）保证优雅退出。',
+    tech: ['Claude Code', 'Process Pool', 'Role-based Isolation', 'stream-json Parser', 'Go'],
   },
 ];
 
@@ -123,6 +123,7 @@ const infra = {
           { name: 'executor/', desc: '执行编排 + 风险检测', color: 'indigo' },
           { name: 'retry/', desc: '四级智能重试', color: 'amber' },
           { name: 'acceptance/', desc: 'L5 独立验收 + 缺陷裁决', color: 'amber' },
+          { name: 'aijob/', desc: 'AI 作业一等公民 + 两步法终止', color: 'amber' },
           { name: 'observer/', desc: 'StateEvent 总线 + 监控', color: 'cyan' },
           { name: 'notifier/', desc: '飞书 + SSE 双通道', color: 'cyan' },
           { name: 'store/', desc: '持久化层 MySQL', color: 'green' },

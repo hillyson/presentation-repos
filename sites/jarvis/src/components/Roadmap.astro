@@ -135,7 +135,19 @@ const phases = [
     ],
   },
   {
-    id: 'Phase 9+',
+    id: 'Phase 9',
+    milestone: 'M2',
+    title: 'AI 作业管理（迭代 16）',
+    status: 'done',
+    items: [
+      'AIJob 一等公民 + 四来源统一观测',
+      'stream-json 解析精确 token & cost',
+      '两步法终止（SIGTERM → 5s → SIGKILL）',
+      'ai_jobs / ai_job_events 双表 + SSE 实时推送',
+    ],
+  },
+  {
+    id: 'Phase 10+',
     milestone: 'M2',
     title: '闭环补齐（迭代 11-15）',
     status: 'planning',
@@ -167,7 +179,7 @@ const milestoneMap = {
       <div class="section-label" data-animate>开发路线图</div>
       <h2 class="section-title" id="roadmap-title" data-animate data-delay="1">从雏形到成熟平台</h2>
       <p class="section-desc" data-animate data-delay="2">
-        按两个里程碑推进：<strong>M1 初版闭环</strong>完成端到端打通；<strong>M2 生产级自动化</strong>引入多 Workplace、研发过程质量门 L1-L4、独立验收 L5，实现"能自动完成高质量任务"。
+        按两个里程碑推进：<strong>M1 初版闭环</strong>完成端到端打通；<strong>M2 生产级自动化</strong>引入多 Workplace、研发过程质量门 L1-L4、独立验收 L5、AI 作业一等公民化，实现"能自动完成高质量任务且全程可观测"。
       </p>
     </div>
 
@@ -212,7 +224,7 @@ const milestoneMap = {
     <div class="milestone-section" data-animate>
       <div class="milestone-header milestone-header-amber">
         <span class="milestone-label">M2 · 生产级自动化</span>
-        <span class="milestone-status">规划中 · 迭代 8 ~ 15</span>
+        <span class="milestone-status">迭代 16 已完成 · 其余规划中</span>
       </div>
     </div>
 
@@ -221,7 +233,7 @@ const milestoneMap = {
         const status = statusMap[phase.status];
         return (
           <article
-            class="roadmap-card card"
+            class={`roadmap-card card ${phase.status === 'done' ? 'roadmap-card-done' : ''}`}
             data-animate
             data-delay={String((i % 3) + 1)}
           >
@@ -233,7 +245,9 @@ const milestoneMap = {
             <ul class="roadmap-items">
               {phase.items.map(item => (
                 <li class="roadmap-item">
-                  <span class="item-check" aria-hidden="true">○</span>
+                  <span class={`item-check ${phase.status === 'done' ? 'item-check-done' : ''}`} aria-hidden="true">
+                    {phase.status === 'done' ? '✓' : '○'}
+                  </span>
                   {item}
                 </li>
               ))}
@@ -247,10 +261,10 @@ const milestoneMap = {
     <div class="roadmap-progress" data-animate>
       <div class="progress-header">
         <span class="progress-label">总体进度</span>
-        <span class="progress-fraction">M1 · 8/8 已完成 · M2 规划中</span>
+        <span class="progress-fraction">M1 · 8/8 · M2 · 1/5（迭代 16 已完成）</span>
       </div>
-      <div class="progress-bar" role="progressbar" aria-valuenow={67} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 67%">
-        <div class="progress-fill" style="width: 67%"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow={69} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 69%">
+        <div class="progress-fill" style="width: 69%"></div>
       </div>
     </div>
   </div>

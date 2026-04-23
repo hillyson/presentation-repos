@@ -36,6 +36,13 @@ const features = [
     tags: ['MR 自动审查', 'Diff 过滤', '项目白名单', 'Bot 评论管理'],
   },
   {
+    icon: '👁',
+    title: 'AI 作业实时观测（AIJob 一等公民）',
+    color: 'blue',
+    desc: '每次 claude CLI 进程调用独立建模为 AIJob，统一覆盖四类来源：Task 调度 / Webhook 直连 / agent-loop 每轮 / resume 续跑。stream-json 解析精确 token & cost，SSE 实时推送，两步法终止（SIGTERM → 5s 宽限 → SIGKILL）保证 flush 与审计。',
+    tags: ['4 类来源', 'stream-json 解析', '实时 SSE', '两步法终止'],
+  },
+  {
     icon: '⚖',
     title: '缺陷裁决（severity × cost × scope）',
     color: 'amber',
