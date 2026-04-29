@@ -102,13 +102,13 @@ const phases = [
     id: 'Phase 6',
     milestone: 'M2',
     title: '多 Workplace 真实调度（迭代 8）',
-    status: 'planning',
-    note: '当前单 executor 可满足需求，已主动暂缓避免过早增复杂度',
+    status: 'done',
+    note: '手动 override UI、持久化熔断、真实重启 resume E2E 作为后续增强',
     items: [
-      'Executor 路由：按 WorkplaceID 动态选 URL',
-      'Workplace 分配策略 + repo 亲和性',
-      '多 Executor 健康检查 + 熔断降级',
-      'Session resume 真实性验证',
+      'workplace.Router：按 task.WorkplaceID 解析 executor URL',
+      'Assigner：ConfirmDAG 自动分配 + repo 亲和 + 负载分散',
+      'HealthChecker：心跳/状态检查 + 3 次失败内存熔断',
+      'WebUI 健康徽标 + claude-executor advertise_url 自注册',
     ],
   },
   {
@@ -279,7 +279,7 @@ const milestoneMap = {
     <div class="milestone-section" data-animate>
       <div class="milestone-header milestone-header-amber">
         <span class="milestone-label">M2 · 生产级自动化</span>
-        <span class="milestone-status">迭代 9/10/11/12/13/16/17/18 已完成 · 8 暂缓</span>
+        <span class="milestone-status">9 / 9 已完成（迭代 8/9/10/11/12/13/16/17/18）</span>
       </div>
     </div>
 
@@ -322,10 +322,10 @@ const milestoneMap = {
     <div class="roadmap-progress" data-animate>
       <div class="progress-header">
         <span class="progress-label">总体进度</span>
-        <span class="progress-fraction">M1 · 8/8 · M2 · 8/9（迭代 8 暂缓）</span>
+        <span class="progress-fraction">M1 · 8/8 · M2 · 9/9（核心闭环达成）</span>
       </div>
-      <div class="progress-bar" role="progressbar" aria-valuenow={94} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 94%">
-        <div class="progress-fill" style="width: 94%"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 100%">
+        <div class="progress-fill" style="width: 100%"></div>
       </div>
     </div>
   </div>

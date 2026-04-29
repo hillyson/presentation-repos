@@ -26,11 +26,11 @@ const steps = [
   },
   {
     num: '04',
-    title: '事件驱动调度',
-    desc: 'scheduler 以事件驱动为主、10~30s 轮询兜底，依据 task_dag_edges 解锁后继任务；同 repo 通过 Workspace Lock 串行，跨 repo 自由并行。',
+    title: '事件驱动调度 + 多 Workplace 路由',
+    desc: 'scheduler 以事件驱动为主、10~30s 轮询兜底，依据 task_dag_edges 解锁后继任务；同 repo 通过 Workspace Lock 串行，跨 repo 自由并行。workplace.Router 按 task.workplace_id 动态解析 executor URL，HealthChecker 派发前校验心跳/状态/熔断，不健康节点自动跳过。',
     color: 'primary',
     icon: '⚡',
-    note: '事件主路径 + 轮询兜底',
+    note: '事件主路径 + Router + 健康熔断',
   },
   {
     num: '05',

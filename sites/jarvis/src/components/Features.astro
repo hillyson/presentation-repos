@@ -78,6 +78,13 @@ const features = [
     tags: ['事件驱动', '轮询兜底', 'Workspace Lock'],
   },
   {
+    icon: '🌐',
+    title: '多 Workplace 调度（迭代 8）',
+    color: 'indigo',
+    desc: 'workplace.Router 按 task.workplace_id 动态解析 executor URL；ConfirmDAG 时自动分配，同 repo 保持粘性，未绑定 repo 按当前负载分散。HealthChecker 调度前检查心跳/状态，连续 3 次 dispatch 失败触发 5 分钟熔断；claude-executor 通过 advertise_url 自注册到 workplaces 表。',
+    tags: ['Router', '亲和性分配', '心跳熔断', 'advertise 自注册'],
+  },
+  {
     icon: '⚡',
     title: '最小干预设计',
     color: 'purple',
