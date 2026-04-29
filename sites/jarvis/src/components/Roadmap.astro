@@ -97,12 +97,13 @@ const phases = [
       '一键启动脚本',
     ],
   },
-  // ─────────── M2 · 生产级自动化（规划中） ───────────
+  // ─────────── M2 · 生产级自动化 ───────────
   {
     id: 'Phase 6',
     milestone: 'M2',
     title: '多 Workplace 真实调度（迭代 8）',
     status: 'planning',
+    note: '当前单 executor 可满足需求，已主动暂缓避免过早增复杂度',
     items: [
       'Executor 路由：按 WorkplaceID 动态选 URL',
       'Workplace 分配策略 + repo 亲和性',
@@ -114,28 +115,64 @@ const phases = [
     id: 'Phase 7',
     milestone: 'M2',
     title: '研发过程质量门 L1-L4（迭代 9）',
-    status: 'planning',
+    status: 'done',
     items: [
-      'L1 项目级 verify（软门 → 硬门）',
-      'L2 Executor 自检 + 证据包 + 反幻觉',
-      'L3 AI Code Review verdict 门控',
-      'L4 CI Pipeline 绿门 + 质量指标',
+      'L1 verify 软门 + project-rules.yaml 配置',
+      'L2 Executor 自检 + evidence_mismatch 反幻觉',
+      'L3 <review_verdict> 结构化 + l3_retry_count',
+      'L4 pipeline-status callback + 质量门 KPI',
     ],
   },
   {
     id: 'Phase 8',
     milestone: 'M2',
-    title: '独立验收 L5 · Verifier-AI（迭代 10）',
-    status: 'planning',
+    title: '需求级验收独立增强（迭代 10）',
+    status: 'done',
     items: [
-      '独立 Verifier Executor（可跨模型）',
-      '验收计划 + 逐条 criterion 执行',
-      'uncertain 转人工 + 缺陷裁决矩阵',
-      'WebUI 验收中心 + 一次通过率统计',
+      'final verify-* DAG 节点作为验收入口',
+      'acceptance run 三表落地 + lifecycle service',
+      'Planner / Runner / Adjudicator 三段执行',
+      'WebUI 验收中心 + Analytics 健康度指标',
     ],
   },
   {
     id: 'Phase 9',
+    milestone: 'M2',
+    title: '审批 / Reflection 端到端闭环（迭代 11）',
+    status: 'done',
+    items: [
+      '高风险审批 → 移除 blocked → 任务恢复',
+      'reject 语义：cancel + 下游级联取消',
+      'L2 Reflection 同步决策路径',
+      '审批操作完整审计链',
+    ],
+  },
+  {
+    id: 'Phase 10',
+    milestone: 'M2',
+    title: 'WebUI SSE 实时化（迭代 12）',
+    status: 'done',
+    items: [
+      'SSEBroker 15s heartbeat 防长连接断',
+      '全局单 EventSource + 多 handler 解耦',
+      'DAG 局部更新 + 重连全量补齐',
+      '审批 toast + 侧边栏未读计数',
+    ],
+  },
+  {
+    id: 'Phase 11',
+    milestone: 'M2',
+    title: 'GitLab 一体化本地体验（迭代 13）',
+    status: 'done',
+    items: [
+      '一键 ./start-webui.sh --full 启动 6 服务',
+      'webhook → core → DB 端到端验证',
+      'GitLab 事件幂等（重复投递 no-op）',
+      'GitLab MR 漂移 reconciler',
+    ],
+  },
+  {
+    id: 'Phase 12',
     milestone: 'M2',
     title: 'AI 作业管理（迭代 16）',
     status: 'done',
@@ -143,19 +180,31 @@ const phases = [
       'AIJob 一等公民 + 四来源统一观测',
       'stream-json 解析精确 token & cost',
       '两步法终止（SIGTERM → 5s → SIGKILL）',
-      'ai_jobs / ai_job_events 双表 + SSE 实时推送',
+      'ai_jobs / ai_job_events 双表 + SSE 推送',
     ],
   },
   {
-    id: 'Phase 10+',
+    id: 'Phase 13',
     milestone: 'M2',
-    title: '闭环补齐（迭代 11-15）',
-    status: 'planning',
+    title: 'DAG 编辑协作 + 流程可见性（迭代 17）',
+    status: 'done',
     items: [
-      '审批 & 反思 e2e（迭代 11）',
-      'WebUI 实时化（迭代 12）',
-      'GitLab 一体化 + 可观测性（迭代 13-14）',
-      '多环境 / 配置热更新（迭代 15）',
+      'AI 对话调整 DAG（pending_confirm/ready）',
+      'PRD 合并 preview / apply 双步落库',
+      '需求列表"流程"列文案',
+      'LLM 作业终态对齐（消除 CLI 假完成）',
+    ],
+  },
+  {
+    id: 'Phase 14',
+    milestone: 'M2',
+    title: 'AIJob attempt 跟踪 + 僵尸恢复（迭代 18）',
+    status: 'done',
+    items: [
+      'attempt_id 区分多次执行（同 task 多条 AIJob）',
+      'reconcile 每分钟扫描陈旧 running 任务',
+      'AIJob 终态回写 OnSucceeded / OnFailed',
+      'RecoverStuckScheduled 重置超时 scheduled',
     ],
   },
 ];
@@ -215,6 +264,12 @@ const milestoneMap = {
                 </li>
               ))}
             </ul>
+            {phase.note && (
+              <div class="roadmap-note">
+                <span class="roadmap-note-icon" aria-hidden="true">ⓘ</span>
+                {phase.note}
+              </div>
+            )}
           </article>
         );
       })}
@@ -224,7 +279,7 @@ const milestoneMap = {
     <div class="milestone-section" data-animate>
       <div class="milestone-header milestone-header-amber">
         <span class="milestone-label">M2 · 生产级自动化</span>
-        <span class="milestone-status">迭代 16 已完成 · 其余规划中</span>
+        <span class="milestone-status">迭代 9/10/11/12/13/16/17/18 已完成 · 8 暂缓</span>
       </div>
     </div>
 
@@ -252,6 +307,12 @@ const milestoneMap = {
                 </li>
               ))}
             </ul>
+            {phase.note && (
+              <div class="roadmap-note">
+                <span class="roadmap-note-icon" aria-hidden="true">ⓘ</span>
+                {phase.note}
+              </div>
+            )}
           </article>
         );
       })}
@@ -261,10 +322,10 @@ const milestoneMap = {
     <div class="roadmap-progress" data-animate>
       <div class="progress-header">
         <span class="progress-label">总体进度</span>
-        <span class="progress-fraction">M1 · 8/8 · M2 · 1/5（迭代 16 已完成）</span>
+        <span class="progress-fraction">M1 · 8/8 · M2 · 8/9（迭代 8 暂缓）</span>
       </div>
-      <div class="progress-bar" role="progressbar" aria-valuenow={69} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 69%">
-        <div class="progress-fill" style="width: 69%"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow={94} aria-valuemin={0} aria-valuemax={100} aria-label="开发进度 94%">
+        <div class="progress-fill" style="width: 94%"></div>
       </div>
     </div>
   </div>
@@ -383,6 +444,27 @@ const milestoneMap = {
   }
 
   .item-check-done { color: var(--accent-green); }
+
+  .roadmap-note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    font-size: 0.75rem;
+    color: var(--accent-amber);
+    line-height: 1.5;
+  }
+
+  .roadmap-note-icon {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    line-height: 1;
+    margin-top: 1px;
+  }
 
   /* Progress */
   .roadmap-progress {

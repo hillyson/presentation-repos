@@ -10,19 +10,19 @@ const steps = [
   },
   {
     num: '02',
-    title: '六维结构化澄清',
-    desc: 'LLM 针对缺失/模糊字段逐项发起多轮对话澄清，结合 choices 交互快速锁定关键信息，实时更新六维度结构化摘要，防止模糊需求进入执行。',
+    title: '六维结构化澄清（PRD 合并预览）',
+    desc: 'LLM 针对缺失/模糊字段逐项发起多轮对话澄清，结合 choices 交互快速锁定关键信息。PRD 合并采用 preview / apply 双步：先返回每个维度的 diff，用户确认后才落库，防止模糊需求进入执行。',
     color: 'purple',
     icon: '🎯',
-    note: 'LLM 对话 + choices 交互',
+    note: 'LLM 对话 + choices + diff 预览',
   },
   {
     num: '03',
-    title: 'AI 拆解 → DAG 确认门',
-    desc: 'decomposer 调用 Claude 产出 Task JSON，经 Schema 校验 + DAG 无环检测后进入 pending_confirm；Web UI 展示完整 DAG，人工确认通过后需求进入 ready。',
+    title: 'AI 拆解 → DAG 确认门 → 协作编辑',
+    desc: 'decomposer 调用 Claude 产出 Task JSON，校验 + 持久化全部放进 WithAskToolsValidate 钩子（迭代 17 终态对齐，消除"CLI 成功但 DAG 空"假完成）。pending_confirm / ready 阶段可通过 POST /requirements/:id/dag/chat 让 AI 对话调整 DAG，已 dispatch/running/success 任务被 409 保护。',
     color: 'indigo',
     icon: '⬡',
-    note: 'Schema 校验 + 无环检测',
+    note: 'Schema 校验 + 无环检测 + AI 对话编辑',
   },
   {
     num: '04',
@@ -60,10 +60,10 @@ const steps = [
   {
     num: '08',
     title: 'AI Code Review（Reviewer-AI）',
-    desc: 'MR 创建/更新或分支 push 触发 gitlab-webhook 异步审查：智能 diff 过滤跳过生成文件 + 项目白名单 + Bot 评论隐藏标签，每个 MR 只保留最新一条审查意见。',
+    desc: 'MR 创建/更新或分支 push 触发 gitlab-webhook 异步审查：智能 diff 过滤跳过生成文件 + 项目白名单 + Bot 评论隐藏标签。审查输出末尾附带 <review_verdict> 结构化 JSON（verdict + issues 列表），core 通过 X-Jarvis-Secret 鉴权写入 task_reviews 与 task_index.review_verdict。',
     color: 'cyan',
     icon: '🔍',
-    note: 'MR/Push 自动触发',
+    note: 'MR/Push 自动触发 + 结构化 verdict',
   },
   {
     num: '09',
@@ -83,11 +83,11 @@ const steps = [
   },
   {
     num: '11',
-    title: '交付（delivered）',
-    desc: 'Verifier 全条 pass 或"带已知问题放行"后需求进入 delivered；task_index 与 GitLab jarvis:* 标签双向同步，MR merged 释放 Workspace Lock，飞书推送验收报告。',
+    title: '交付（delivered）+ 漂移恢复',
+    desc: 'Verifier 全条 pass 或"带已知问题放行"后需求进入 delivered；task_index 与 GitLab jarvis:* 标签双向同步，MR merged 释放 Workspace Lock，飞书推送验收报告。后台 reconcile 模块每分钟扫描陈旧 running 任务并对账最新 AIJob 终态，GitLab drift reconciler 修复 mr_open 漂移，避免僵尸状态滞留。',
     color: 'green',
     icon: '✓',
-    note: 'delivered · GitLab 状态权威',
+    note: 'delivered · 漂移修复 · 状态权威',
   },
 ];
 ---

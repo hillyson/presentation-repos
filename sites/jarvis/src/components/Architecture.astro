@@ -37,8 +37,8 @@ const layers = [
 
 const infra = {
   name: 'service-manager',
-  description: '基础设施 daemon（端口 9100）— 管理所有 Jarvis 服务的完整生命周期：启停 / 重启 / 编译重建、SSE 状态广播、实时日志流、按依赖顺序批量操作。不感知业务语义，只做进程管理。',
-  tech: ['REST API', 'SSE pub-sub', 'Process Adopt', 'Go'],
+  description: '基础设施 daemon（端口 9100）— 管理所有 Jarvis 服务的完整生命周期：启停 / 重启 / 编译重建、SSE 状态广播、实时日志流、按依赖顺序批量操作、构建版本审计（Git short hash + commit + built_at + dirty）。不感知业务语义，只做进程管理。',
+  tech: ['REST API', 'SSE pub-sub', 'Process Adopt', 'Build Version Audit', 'Go'],
 };
 ---
 
@@ -115,18 +115,19 @@ const infra = {
       </div>
       <div class="core-modules">
         {[
-          { name: 'api/', desc: 'HTTP 接入点 + DAG 查询', color: 'blue' },
-          { name: 'decomposer/', desc: 'AI 需求拆解 + Schema 校验', color: 'purple' },
-          { name: 'requirement/', desc: '需求引擎 + 确认门控', color: 'purple' },
-          { name: 'task/', desc: '任务 & DAG 管理', color: 'purple' },
-          { name: 'scheduler/', desc: '事件驱动 + 轮询调度', color: 'indigo' },
-          { name: 'executor/', desc: '执行编排 + 风险检测', color: 'indigo' },
-          { name: 'retry/', desc: '四级智能重试', color: 'amber' },
+          { name: 'api/', desc: 'HTTP 入口 + DAG chat / PRD preview-apply', color: 'blue' },
+          { name: 'decomposer/', desc: 'AI 拆解 + 终态对齐校验（迭代 17）', color: 'purple' },
+          { name: 'requirement/', desc: '需求引擎 + 流程列文案 + 确认门控', color: 'purple' },
+          { name: 'task/', desc: '任务 & DAG 管理 + 运行时改 DAG', color: 'purple' },
+          { name: 'scheduler/', desc: '事件驱动 + 轮询调度 + 卡死检测', color: 'indigo' },
+          { name: 'executor/', desc: '执行编排 + 风险检测 + intent 解析', color: 'indigo' },
+          { name: 'retry/', desc: '四级智能重试 + Reflection', color: 'amber' },
           { name: 'acceptance/', desc: 'L5 独立验收 + 缺陷裁决', color: 'amber' },
-          { name: 'aijob/', desc: 'AI 作业一等公民 + 两步法终止', color: 'amber' },
+          { name: 'aijob/', desc: 'AI 作业一等公民 + attempt 跟踪', color: 'amber' },
+          { name: 'reconcile/', desc: '僵尸任务恢复 + GitLab 漂移修复', color: 'amber' },
           { name: 'observer/', desc: 'StateEvent 总线 + 监控', color: 'cyan' },
-          { name: 'notifier/', desc: '飞书 + SSE 双通道', color: 'cyan' },
-          { name: 'store/', desc: '持久化层 MySQL', color: 'green' },
+          { name: 'notifier/', desc: '飞书 + SSE 双通道（15s heartbeat）', color: 'cyan' },
+          { name: 'store/', desc: '持久化层 MySQL · 16 张业务表', color: 'green' },
         ].map((m, i) => (
           <div class={`core-module core-module-${m.color}`} data-animate data-delay={String(i % 4 + 1)}>
             <code class="module-name">{m.name}</code>
